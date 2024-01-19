@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управління уроками</title>
+</head>
+<ul>
+        <li><a href="{{ url_for('group.group_add') }}">Групи</a></li>
+        <li><a href="{{ url_for('student.student_add') }}">Студенти</a></li>
+        <li><a href="{{ url_for('lesson.lesson_add') }}">Уроки</a></li>
+    </ul>
+<body>
+<h1>Управління уроками</h1>
+
+<ul>
+    {% for lesson in lessons %}
+        <li>
+            {{ lesson.title }}
+            {% if lesson.groups %}
+                (Група:
+                {% for group in lesson.groups %}
+                    {{ group.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                )
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+
+<form method="post" action="{{ url_for('lesson.lesson_add') }}">
+    <label for="title">Назва уроку:</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="groups">Група:</label>
+    <select id="groups" name="groups" multiple>
+        {% for group in groups %}
+            <option value="{{ group.id }}">{{ group.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Додати урок</button>
+</form>
+</body>
+</html>
